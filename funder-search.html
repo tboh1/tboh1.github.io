@@ -74,7 +74,7 @@ function loadReg() {
 let status = `<p>Loading...</p>`;	
 document.getElementById('status').innerHTML = status;
 
-fetch('registry.rdf').then(r => r.text()).then(xml => $.parseXML(xml)).then((reg) => {
+fetch('http://10.13.5.40:8887/registry.rdf').then(r => r.text()).then(xml => $.parseXML(xml)).then((reg) => {
 
   var i;
   var count = 0;
