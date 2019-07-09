@@ -4,30 +4,30 @@
 <meta charset="utf-8">
 <title>Open Funder Registry</title>
 	<style>
-		
+
 body {
-	margin: 15px;		
+	margin: 15px;
 		}
 #total, #date, #status {
 			margin: 5px;
 		}
-		
+
 		#status {
 			color: red;
 			font-size: 20px;
 		}
-		
+
 .title {
 		font-size: 35px;
 	font-weight: 500;
 	padding-bottom: 15px;
 		}
-		
+
 table,th,td {
   border : 1px solid black;
   border-collapse: collapse;
 }
-		
+
 th,td {
   padding: 5px;
 }
@@ -38,16 +38,16 @@ th {
 		}
 
 .header-row {
-	border: 1px solid gray;	
-	
+	border: 1px solid gray;
+
 		}
-		
+
 .field {
 	margin: 10px, 10px, 10px;
 	padding: 5px;
 	width: 300px;
 		}
-		
+
 </style>
 </head>
 
@@ -69,37 +69,37 @@ loadReg();
 
 })
 
-function loadReg() {	
-	
-let status = `<p>Loading...</p>`;	
+function loadReg() {
+
+let status = `<p>Loading...</p>`;
 document.getElementById('status').innerHTML = status;
 
-fetch('https://127.0.0.1:8000/registry.rdf').then(r => r.text()).then(xml => $.parseXML(xml)).then((reg) => {
+fetch('registry.rdf').then(r => r.text()).then(xml => $.parseXML(xml)).then((reg) => {
 
   var i;
   var count = 0;
   var version = `<p>Last Updated: ${reg.getElementsByTagName("dct:created")[0].childNodes[0].nodeValue}</p>`;
   var table=`<tr><th>#</th><th>Funder Name</th><th>Funder ID</th><th>Funder Type</th><th>Funder Region</th><th>Funder Country</th></tr>`;
- 
+
   var x = reg.getElementsByTagName("skos:Concept");
-  
-  for (i = 0; i <x.length; i++) { 
+
+  for (i = 0; i <x.length; i++) {
 	count ++
 	var name = x[i].getElementsByTagName("skosxl:literalForm")[0].childNodes[0].nodeValue;
 	let region;
-	  
+
 	if (x[i].getElementsByTagName("svf:region")[0] != undefined) {
 	region = x[i].getElementsByTagName("svf:region")[0].childNodes[0].nodeValue;
 	} else {region = '';}
-	  
+
 	if (x[i].getElementsByTagName("schema:addressCountry")[0] != undefined) {
 	country = x[i].getElementsByTagName("schema:addressCountry")[0].childNodes[0].nodeValue;
 	} else {country = '';}
-	   
+
     table += `<tr><td>${count}</td><td>${name}</td><td><a href="${x[i].getAttribute("rdf:about")}">${x[i].getAttribute("rdf:about")}</a></td><td>${x[i].getElementsByTagName("svf:fundingBodySubType")[0].childNodes[0].nodeValue}</td><td>${region}</td><td>${country}</td>`;
-	  
+
   }
- 
+
   document.getElementById("res").innerHTML = table;
   document.getElementById("date").innerHTML = version;
   return count;
@@ -113,7 +113,7 @@ fetch('https://127.0.0.1:8000/registry.rdf').then(r => r.text()).then(xml => $.p
 	document.getElementById('status').style.color = 'green';
 }).catch(err => console.log(err))
 }
-	
+
 function search() {
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("searchInput");
@@ -129,7 +129,7 @@ function search() {
       } else {
         tr[i].style.display = "none";
       }
-    }       
+    }
   }
 }
 
@@ -141,4 +141,3 @@ function search() {
   crossorigin="anonymous"></script>
 	</body>
 </html>
-
